@@ -5,9 +5,13 @@
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
 <title>Client-side Request for Encrypted Authoritative DNS Queries</title>
-<meta content="Your Name Here" name="author">
+<meta content="Leon Fernandez" name="author">
 <meta content="
-       TODO Abstract 
+       This document describes an EDNS0 option that a client can attach to a
+DNS query to signal to a recursive resolver that it should prefer
+encrypted transports while resolving the query. The option can also
+be used on the return path by the recursor to signal whether encryption
+was achievable or not. 
     " name="description">
 <meta content="xml2rfc 3.34.1" name="generator">
 <meta content="next generation" name="keyword">
@@ -1046,7 +1050,7 @@ svg {
 <td class="right">October 2026</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Here</td>
+<td class="left">Fernandez</td>
 <td class="center">Expires 23 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1055,7 +1059,7 @@ svg {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">WG Working Group</dd>
+<dd class="workgroup">Network Working Group</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-client-side-adox-leon-dnsop-latest</dd>
 <dt class="label-published">Published:</dt>
@@ -1069,7 +1073,7 @@ svg {
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
-      <div class="author-name">Y. N. Here</div>
+      <div class="author-name">L. Fernandez</div>
 <div class="org">Your Organization Here</div>
 </div>
 </dd>
@@ -1078,7 +1082,11 @@ svg {
 <h1 id="title">Client-side Request for Encrypted Authoritative DNS Queries</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes an EDNS0 option that a client can attach to a
+DNS query to signal to a recursive resolver that it should prefer
+encrypted transports while resolving the query. The option can also
+be used on the return path by the recursor to signal whether encryption
+was achievable or not.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1086,14 +1094,10 @@ svg {
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://example.com/LATEST">https://example.com/LATEST</a></span>.
+        The latest revision of this draft can be found at <span><a href="https://zluudg.github.io/draft-client-side-adox-signal/draft-client-side-adox-leon-dnsop.html">https://zluudg.github.io/draft-client-side-adox-signal/draft-client-side-adox-leon-dnsop.html</a></span>.
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-client-side-adox-leon-dnsop/">https://datatracker.ietf.org/doc/draft-client-side-adox-leon-dnsop/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
-<p id="section-note.1-3">
-        Discussion of this document takes place on the
-        WG Working Group mailing list (<span><a href="mailto:WG@example.com">mailto:WG@example.com</a></span>),
-        which is archived at <span><a href="https://example.com/WG">https://example.com/WG</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
-<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/USER/REPO">https://github.com/USER/REPO</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/zluudg/draft-client-side-adox-signal">https://github.com/zluudg/draft-client-side-adox-signal</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1147,22 +1151,83 @@ svg {
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-the-edns0-privacy-option" class="internal xref">The EDNS0 PRIVACY Option</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-privacy-values" class="internal xref">Privacy Values</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-interpretations-of-privacy-" class="internal xref">Interpretations of Privacy Values in a query context</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-none" class="internal xref">NONE</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-opportunistic" class="internal xref">OPPORTUNISTIC</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-strict" class="internal xref">STRICT</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-interpretations-of-privacy-v" class="internal xref">Interpretations of Privacy Values in a response context</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-cleartext" class="internal xref">CLEARTEXT</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
+                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-encrypted" class="internal xref">ENCRYPTED</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.3">
+                    <p id="section-toc.1-1.4.2.2.2.3.1"><a href="#section-4.2.3" class="auto internal xref">4.2.3</a>.  <a href="#name-cached" class="internal xref">CACHED</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-protocol-description" class="internal xref">Protocol Description</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-setting-a-response-privacy-" class="internal xref">Setting a Response PRIVACY Value</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-relation-to-qname-minimisat" class="internal xref">Relation to QNAME minimisation</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1173,72 +1238,381 @@ svg {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">A DNS client can choose what protocol to use when it sends a query to
+a resolver. There are several privacy-friendly options that the client
+can choose between such as HTTPS, QUIC and TLS. However, the choice
+only affects the first hop and the query will typically be sent in
+cleartext by the resolver during the resolution process. In order to
+preserve the privacy of the client beyond the first hop, the client
+should be able to signal a desire that the resolver uses encrypted
+transports during the resolution process. Furthermore, the client
+should be informed of how the resolution was carried out, in case it
+would like to discard data that was not received over an encrypted
+transport.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines an EDNS0 <span>[<a href="#RFC6891" class="cite xref">RFC6891</a>]</span> option that allows a client
+to signal a preference for encrypted authoritative DNS (ADoX). By
+signalling a preference, the client can urge a recursive resolver to
+discover possibilities for encrypted transport. Means of discovery
+include, but are not limited to, <span>[<a href="#RFC9539" class="cite xref">RFC9539</a>]</span>, <span>[<a href="#I-D.johani-dnsop-transport-signaling" class="cite xref">I-D.johani-dnsop-transport-signaling</a>]</span>
+and <span>[<a href="#I-D.wesplaap-deleg-transport" class="cite xref">I-D.wesplaap-deleg-transport</a>]</span>. The signal from the client can
+also prevent the recursive resolver from leaking queries that would
+otherwise have been sent in cleartext. The same EDNS0 option can also
+be used on the return path so that the recursive resolver can give an
+indication to the client about what level of privacy was achieved for
+a particular query.<a href="#section-1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-2-1">Client: A stub resolver, typically part of an end-users operating system
+    or web browser.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Recursive Resolver/Recursor: A resolver that resolves a query on behalf
+    of a client. This is done by first querying the root of the DNS tree
+    and, if necessary, following the chain of delegations with more
+    queries until an authoritative server is found.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">ADoX: Authoritative DNS-over-X, where X implies some arbitrary encrypted
+    transport protocol.<a href="#section-2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="the-edns0-privacy-option">
+<section id="section-3">
+      <h2 id="name-the-edns0-privacy-option">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-the-edns0-privacy-option" class="section-name selfRef">The EDNS0 PRIVACY Option</a>
+      </h2>
+<p id="section-3-1">The EDNS0 PRIVACY option is structured as follows:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-2">
+<pre>
+                                               1   1   1   1   1   1
+       0   1   2   3   4   5   6   7   8   9   0   1   2   3   4   5
+     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ 0:  |                            OPTION-CODE                        |
+     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ 2:  |                           OPTION-LENGTH                       |
+     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ 3:  |           PRIVACY             |            VALIDATED          |
+     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</pre><a href="#section-3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3-3">Field definition details:<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">OPTION-CODE: The EDNS0 option code for client-privacy-request, defined
+    as TBD.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">OPTION-LENGTH: The option length <span class="bcp14">SHOULD</span> have a value of exactly 1 if
+    this option is present. Consumers of this signal <span class="bcp14">SHOULD NOT</span> act on
+    malformed options.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">PRIVACY: For queries, this value encodes the client's desired level of
+    privacy. For responses, this value encodes the level of privacy
+    that the resolver was able to achieve. Currently defined values are
+    listed in <a href="#privacy-values" class="auto internal xref">Section 4</a>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">VALIDATED: For queries, this field is unused and <span class="bcp14">MUST</span> be set to 0.
+    For responses, it <span class="bcp14">SHOULD</span> be set to 1 if the recursor succesfully
+    validated the certificates it encountered during the resolution
+    process. Else, it should be set to 0. Validation can be done via
+    mechanisms such as DANE <span>[<a href="#RFC6698" class="cite xref">RFC6698</a>]</span> or the WebPKI. The VALIDATED
+    option <span class="bcp14">SHOULD</span> only be set if the PRIVACY option is CACHED or
+    ENCRYPTED.<a href="#section-3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="privacy-values">
+<section id="section-4">
+      <h2 id="name-privacy-values">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-privacy-values" class="section-name selfRef">Privacy Values</a>
+      </h2>
+<table class="center" id="table-1">
+        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Value</th>
+            <th class="text-left" rowspan="1" colspan="1">Context</th>
+            <th class="text-left" rowspan="1" colspan="1">Mnemonic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">0</td>
+            <td class="text-left" rowspan="1" colspan="1">Query</td>
+            <td class="text-left" rowspan="1" colspan="1">NONE</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">0</td>
+            <td class="text-left" rowspan="1" colspan="1">Response</td>
+            <td class="text-left" rowspan="1" colspan="1">CLEARTEXT</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">1</td>
+            <td class="text-left" rowspan="1" colspan="1">Query</td>
+            <td class="text-left" rowspan="1" colspan="1">OPPORTUNISTIC</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">1</td>
+            <td class="text-left" rowspan="1" colspan="1">Response</td>
+            <td class="text-left" rowspan="1" colspan="1">ENCRYPTED</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">2</td>
+            <td class="text-left" rowspan="1" colspan="1">Query</td>
+            <td class="text-left" rowspan="1" colspan="1">STRICT</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">2</td>
+            <td class="text-left" rowspan="1" colspan="1">Response</td>
+            <td class="text-left" rowspan="1" colspan="1">CACHED</td>
+          </tr>
+        </tbody>
+      </table>
+<div id="interpretations-of-privacy-values-in-a-query-context">
+<section id="section-4.1">
+        <h3 id="name-interpretations-of-privacy-">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-interpretations-of-privacy-" class="section-name selfRef">Interpretations of Privacy Values in a query context</a>
+        </h3>
+<div id="none">
+<section id="section-4.1.1">
+          <h4 id="name-none">
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-none" class="section-name selfRef">NONE</a>
+          </h4>
+<p id="section-4.1.1-1">Same effect as having to client signal at all. No privacy requested by
+the client that is sending the query.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="opportunistic">
+<section id="section-4.1.2">
+          <h4 id="name-opportunistic">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-opportunistic" class="section-name selfRef">OPPORTUNISTIC</a>
+          </h4>
+<p id="section-4.1.2-1">The client is requesting a preference for resolving the query using
+encrypted transports. However, fallback to unencrypted transport is
+acceptable.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="strict">
+<section id="section-4.1.3">
+          <h4 id="name-strict">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-strict" class="section-name selfRef">STRICT</a>
+          </h4>
+<p id="section-4.1.3-1">The client is requesting a strict preference for resolving the query
+using encrypted transports. Leaking information about the query over
+unencrypted transports is not acceptable.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="interpretations-of-privacy-values-in-a-response-context">
+<section id="section-4.2">
+        <h3 id="name-interpretations-of-privacy-v">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-interpretations-of-privacy-v" class="section-name selfRef">Interpretations of Privacy Values in a response context</a>
+        </h3>
+<div id="cleartext">
+<section id="section-4.2.1">
+          <h4 id="name-cleartext">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-cleartext" class="section-name selfRef">CLEARTEXT</a>
+          </h4>
+<p id="section-4.2.1-1">The answer was fetched over an unencrypted connection.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="encrypted">
+<section id="section-4.2.2">
+          <h4 id="name-encrypted">
+<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-encrypted" class="section-name selfRef">ENCRYPTED</a>
+          </h4>
+<p id="section-4.2.2-1">The answer was fetched only over encrypted transports.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cached">
+<section id="section-4.2.3">
+          <h4 id="name-cached">
+<a href="#section-4.2.3" class="section-number selfRef">4.2.3. </a><a href="#name-cached" class="section-name selfRef">CACHED</a>
+          </h4>
+<p id="section-4.2.3-1">The answer was fetched from the resolver's cache and no queries had to
+be sent out.<a href="#section-4.2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="protocol-description">
+<section id="section-5">
+      <h2 id="name-protocol-description">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-protocol-description" class="section-name selfRef">Protocol Description</a>
+      </h2>
+<p id="section-5-1">A client adds the PRIVACY EDNS0 option to a recursive query before
+sending it. A client <span class="bcp14">SHOULD NOT</span> add the PRIVACY option to recursive
+queries being sent in cleartext as this would be counter to what the
+client is trying to achieve.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Given that the client sent its query using an encrypted transport, the
+recursive resolver will try to honor the PRIVACY option. If it is NONE,
+it means the client does not care about what transports are used to
+resolve the query and the recursor may resolve it in any way deemed
+suitable. If the option is OPPORTUNISTIC, the recursor <span class="bcp14">MUST</span> attempt to
+send any iterative queries over an encrypted transport. However, the
+recursor is allowed to fall back to an unencrypted transport after a
+failed attempt. If the option is STRICT the recursor <span class="bcp14">MUST NOT</span> perform
+such a fallback at any point during the resolution process. Using
+contents from the cache is always okay as this does not leak any
+information about the client's query.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div id="setting-a-response-privacy-value">
+<section id="section-5.1">
+        <h3 id="name-setting-a-response-privacy-">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-setting-a-response-privacy-" class="section-name selfRef">Setting a Response PRIVACY Value</a>
+        </h3>
+<p id="section-5.1-1">A recursive resolver should only set a EDNS0 PRIVACY option if the
+option was present in the query. If the data was readily available in
+the recursor's cache, it sets a value of CACHED. If at any point
+during the resolution process, a query was sent unencrypted (either
+due to falling back or to the client query having a value of NONE), the
+resolver <span class="bcp14">MUST</span> set the value to CLEARTEXT. If the resolver solely used
+encrypted transports and data from its cache to retrive the answer, it
+responds with a value of ENCRYPTED. What transport cached data arrived
+over does not matter in this case.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="relation-to-qname-minimisation">
+<section id="section-6">
+      <h2 id="name-relation-to-qname-minimisat">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-relation-to-qname-minimisat" class="section-name selfRef">Relation to QNAME minimisation</a>
+      </h2>
+<p id="section-6-1">QNAME minimisation <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span> is another privacy-enhancement for
+authoritative DNS that recursive resolvers can implement. It should be
+considered orthogonal to what is proposed in this draft. That is, the
+value that the recursor sets for the PRIVACY option <span class="bcp14">SHOULD NOT</span> be
+affected in any way by whether the recursor employs QNAME minimisation
+or not. QNAME minimization does not give as good privacy as encryption
+if there are more than two or three delagations. On the other hand,
+QNAME minimization avoids leaking information to authoritative servers,
+which means there might still be good reasons to use it.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">To encourage the use of both and avoid complex interplay between the
+two, QNAME minimization <span class="bcp14">SHOULD NOT</span> affect the PRIVACY option in a
+recursor's response.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
-<section id="section-2">
+<section id="section-7">
       <h2 id="name-conventions-and-definitions">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+<p id="section-7-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
-appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+appear in all capitals, as shown here.<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security">
-<section id="section-3">
+<section id="section-8">
       <h2 id="name-security-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-3-1">TODO Security<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">Enables/simplifies cache probing through the CACHED option. Not a big
+deal, TTL can be used for that anyway.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">TODO(Discussion of passive vs. active attacks. And the role of the
+VALIDATED flag.)<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana">
-<section id="section-4">
+<section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9-1">
+<pre>
+   +-------+--------------------------+----------+----------------------+
+   | Value | Name                     | Status   | Reference            |
+   +-------+--------------------------+----------+----------------------+
+   | TBD   | client-privacy-request   | Standard | ( This document )    |
+   +-------+--------------------------+----------+----------------------+
+</pre><a href="#section-9-1" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
-<div id="sec-normative-references">
-<section id="section-5">
-      <h2 id="name-normative-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<div id="sec-combined-references">
+<section id="section-10">
+      <h2 id="name-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-10.1">
+        <h3 id="name-normative-references">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC6698">[RFC6698]</dt>
+        <dd>
+<span class="refAuthor">Hoffman, P.</span> and <span class="refAuthor">J. Schlyter</span>, <span class="refTitle">"The DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS) Protocol: TLSA"</span>, <span class="seriesInfo">RFC 6698</span>, <span class="seriesInfo">DOI 10.17487/RFC6698</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6698">https://www.rfc-editor.org/rfc/rfc6698</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6891">[RFC6891]</dt>
+        <dd>
+<span class="refAuthor">Damas, J.</span>, <span class="refAuthor">Graff, M.</span>, and <span class="refAuthor">P. Vixie</span>, <span class="refTitle">"Extension Mechanisms for DNS (EDNS(0))"</span>, <span class="seriesInfo">STD 75</span>, <span class="seriesInfo">RFC 6891</span>, <span class="seriesInfo">DOI 10.17487/RFC6891</span>, <time datetime="2013-04" class="refDate">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6891">https://www.rfc-editor.org/rfc/rfc6891</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9156">[RFC9156]</dt>
+        <dd>
+<span class="refAuthor">Bortzmeyer, S.</span>, <span class="refAuthor">Dolmans, R.</span>, and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"DNS Query Name Minimisation to Improve Privacy"</span>, <span class="seriesInfo">RFC 9156</span>, <span class="seriesInfo">DOI 10.17487/RFC9156</span>, <time datetime="2021-11" class="refDate">November 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9156">https://www.rfc-editor.org/rfc/rfc9156</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9539">[RFC9539]</dt>
+      <dd>
+<span class="refAuthor">Gillmor, D. K., Ed.</span>, <span class="refAuthor">Salazar, J., Ed.</span>, and <span class="refAuthor">P. Hoffman, Ed.</span>, <span class="refTitle">"Unilateral Opportunistic Deployment of Encrypted Recursive-to-Authoritative DNS"</span>, <span class="seriesInfo">RFC 9539</span>, <span class="seriesInfo">DOI 10.17487/RFC9539</span>, <time datetime="2024-02" class="refDate">February 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9539">https://www.rfc-editor.org/rfc/rfc9539</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
-<div id="acknowledgments">
+<div id="sec-informative-references">
+<section id="section-10.2">
+        <h3 id="name-informative-references">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.johani-dnsop-transport-signaling">[I-D.johani-dnsop-transport-signaling]</dt>
+        <dd>
+<span class="refAuthor">Stenstam, J.</span>, <span class="refAuthor">Fernandez, L.</span>, <span class="refAuthor">Bergström, E.</span>, <span class="refAuthor">Homburg, P.</span>, and <span class="refAuthor">S. Dickinson</span>, <span class="refTitle">"Authoritative DNS Transport Signaling"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-johani-dnsop-transport-signaling-02</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-johani-dnsop-transport-signaling-02">https://datatracker.ietf.org/doc/html/draft-johani-dnsop-transport-signaling-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.wesplaap-deleg-transport">[I-D.wesplaap-deleg-transport]</dt>
+      <dd>
+<span class="refAuthor">April, T.</span>, <span class="refAuthor">Špaček, P.</span>, <span class="refAuthor">Weber, R.</span>, and <span class="refAuthor">Lawrence</span>, <span class="refTitle">"Extensible Delegation for DNS using different transport protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-wesplaap-deleg-transport-00</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-wesplaap-deleg-transport-00">https://datatracker.ietf.org/doc/html/draft-wesplaap-deleg-transport-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="implementation-status">
 <section id="appendix-A">
+      <h2 id="name-implementation-status">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+      </h2>
+<p id="appendix-A-1">The TDNS Framework of experimental DNS servers developed and maintained by the
+Swedish Internet Foundation implements this draft (see <a href="https://github.com/johanix/tdns">https://github.com/johanix/tdns</a>). TDNS has support for both the authoritative nameserver and
+recursive nameserver parts of the draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-B">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">TODO acknowledge.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-B">
+<section id="appendix-C">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>
 <address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Your Name Here</span></div>
+        <div dir="auto" class="left"><span class="fn nameRole">Leon Fernandez</span></div>
 <div dir="auto" class="left"><span class="org">Your Organization Here</span></div>
 <div class="email">
 <span>Email:</span>
-<a href="mailto:your.email@example.com" class="email">your.email@example.com</a>
+<a href="mailto:leon.fernandez@internetstiftelsen.se" class="email">leon.fernandez@internetstiftelsen.se</a>
 </div>
 </address>
 </section>
