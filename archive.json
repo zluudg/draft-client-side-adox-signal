@@ -1,0 +1,102 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2026-10-22T02:57:02.956097+00:00",
+  "repo": "zluudg/draft-fernandez-dnsop-client-side-adox-signal",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "accessibility",
+      "description": "Barrier affecting people with disabilities",
+      "color": "f143ab"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOVQl81s8AAAABJu61kg",
+      "title": "Fix README links to use the renamed draft and repo",
+      "url": "https://github.com/zluudg/draft-fernandez-dnsop-client-side-adox-signal/pull/1",
+      "state": "MERGED",
+      "author": "valenting",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-10-21T07:41:53Z",
+      "updatedAt": "2026-10-21T07:44:35Z",
+      "baseRepository": "zluudg/draft-fernandez-dnsop-client-side-adox-signal",
+      "baseRefName": "main",
+      "baseRefOid": "e9018cf602a56d7dfa2f1e358af241493a43772a",
+      "headRepository": "valenting/draft-client-side-adox-signal",
+      "headRefName": "fix-readme-links",
+      "headRefOid": "8a3d849bf25accaa64081d81df6941de4d0cb9c7",
+      "closedAt": "2026-10-21T07:44:35Z",
+      "mergedAt": "2026-10-21T07:44:35Z",
+      "mergedBy": "zluudg",
+      "mergeCommit": {
+        "oid": "48054d145198f12c35b500760ddd79c2664eea35"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOVQl81s8AAAABTZMxJw",
+          "commit": {
+            "abbreviatedOid": "8a3d849"
+          },
+          "author": "zluudg",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2026-10-21T07:44:22Z",
+          "updatedAt": "2026-10-21T07:44:22Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
